@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/auth/Input";
-import { Button } from "@/components/auth/Button";
-import { Logo } from "@/components/auth/Logo";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,7 +45,7 @@ export default function LoginPage() {
       }
 
       toast.success("Welcome back!");
-      router.push("/community");
+      router.push("/");
     } catch (err) {
       setError("An error occurred. Please try again.");
       setIsLoading(false);
@@ -50,108 +53,93 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-green-200 to-pink-300">
-      {/* Navigation Bar */}
-      <nav className="bg-white/80 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Logo />
-            <div className="flex items-center gap-8">
-              <a href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Home
-              </a>
-              <a href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">
-                About Us
-              </a>
-              <a href="/community" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Community
-              </a>
-              <a href="/pg-finder" className="text-gray-700 hover:text-gray-900 transition-colors">
-                PG Finder
-              </a>
-              <a href="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Contact
-              </a>
-              <button
-                onClick={() => router.push("/register")}
-                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-200 hover:scale-105"
-              >
-                Sign Up
-              </button>
-            </div>
+    <div className="relative min-h-screen flex items-center justify-center pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+      <AnimatedBackground />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md relative z-10"
+      >
+        <Card className="p-8 bg-gradient-to-br from-background/80 to-background/40 backdrop-blur-xl border-border/50 shadow-xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+              Welcome Back!
+            </h1>
+            <p className="text-muted-foreground">Log in to continue your college journey</p>
           </div>
-        </div>
-      </nav>
 
-      {/* Login Form */}
-      <div className="flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
-            <div className="text-center mb-8">
-              <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-2">
-                Welcome Back!
-              </h1>
-              <p className="text-gray-600">Log in to continue your college journey</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Vedam ID (Email)
+              </label>
               <Input
-                label="Vedam ID (Email)"
                 type="text"
                 placeholder="Enter your Vedam ID or Email"
                 value={vedamId}
                 onChange={(e) => setVedamId(e.target.value)}
                 required
                 disabled={isLoading}
+                className="bg-background/50 border-border/50 focus:border-purple-500"
               />
+            </div>
 
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Password
+              </label>
               <Input
-                label="Password"
                 type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
+                className="bg-background/50 border-border/50 focus:border-purple-500"
               />
+            </div>
 
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
-                  {error}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded border-gray-300 text-pink-500 focus:ring-pink-500"
-                  />
-                  <span className="text-gray-600">Remember me</span>
-                </label>
-                <a href="/forgot-password" className="text-pink-500 hover:text-pink-600">
-                  Forgot password?
-                </a>
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-md text-sm">
+                {error}
               </div>
+            )}
 
-              <Button type="submit" fullWidth disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Log In"}
-              </Button>
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-border text-purple-600 focus:ring-purple-500"
+                />
+                <span className="text-muted-foreground">Remember me</span>
+              </label>
+              <Link href="/forgot-password" className="text-purple-600 hover:text-purple-700 font-medium">
+                Forgot password?
+              </Link>
+            </div>
 
-              <div className="text-center">
-                <span className="text-gray-600">Don't have an account? </span>
-                <button
-                  type="button"
-                  onClick={() => router.push("/register")}
-                  className="text-pink-500 hover:text-pink-600"
-                >
-                  Sign up
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Log In"}
+            </Button>
+
+            <div className="text-center text-sm">
+              <span className="text-muted-foreground">Don't have an account? </span>
+              <Link
+                href="/register"
+                className="text-purple-600 hover:text-purple-700 font-medium"
+              >
+                Sign up
+              </Link>
+            </div>
+          </form>
+        </Card>
+      </motion.div>
     </div>
   );
 }

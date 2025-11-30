@@ -72,6 +72,7 @@ export const questions = sqliteTable('questions', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   title: text('title').notNull(),
   content: text('content').notNull(),
+  category: text('category').notNull().default('General'),
   askedBy: text('asked_by').references(() => user.id, { onDelete: 'set null' }),
   isAnonymous: integer('is_anonymous', { mode: 'boolean' }).notNull().default(false),
   createdAt: text('created_at').notNull(),

@@ -70,7 +70,7 @@ export default function Home() {
             </motion.div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent leading-tight">
-              Navigate College Life with Confidence
+              Navigate College Life with COLLEGE BUDDY
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -78,24 +78,16 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Link href="/community">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all text-base px-8 group"
-                >
-                  Ask a Question
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="#pg-finder">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 hover:bg-accent/50 text-base px-8"
-                >
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2 hover:bg-accent/50 text-base px-8"
+                asChild
+              >
+                <Link href="#pg-finder">
                   Find Accommodation
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
             {/* Stats */}
@@ -247,7 +239,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div {...fadeInUp} className="text-center">
-            <Link href="/community">
+            <Link href="/campusQueryConnect">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all text-base px-12 group"
@@ -275,35 +267,13 @@ export default function Home() {
           {/* Search Bar */}
           <motion.div {...fadeInUp} className="max-w-4xl mx-auto mb-12">
             <Card className="p-6 bg-gradient-to-br from-background/80 to-background/40 backdrop-blur-xl border-border/50">
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="md:col-span-1">
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="near-campus">Near Campus</SelectItem>
-                      <SelectItem value="city-center">City Center</SelectItem>
-                      <SelectItem value="metro-station">Near Metro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="md:col-span-1">
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Budget" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="budget-5k">Under ₹5,000</SelectItem>
-                      <SelectItem value="budget-10k">₹5,000 - ₹10,000</SelectItem>
-                      <SelectItem value="budget-15k">Above ₹10,000</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                  <Search className="w-5 h-5 mr-2" />
-                  Search PGs
-                </Button>
+              <div className="flex justify-center">
+                <Link href="/collegePGFinder">
+                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-6 text-lg">
+                    <Search className="w-5 h-5 mr-2" />
+                    Search PGs
+                  </Button>
+                </Link>
               </div>
             </Card>
           </motion.div>
@@ -317,31 +287,31 @@ export default function Home() {
           >
             {[
               {
-                name: "Green Valley PG",
+                name: "Stanza Living",
                 location: "0.5 km from campus",
                 price: "₹8,000",
                 students: 24,
-                rating: 4.8,
-                amenities: ["WiFi", "Meals", "AC", "Secure"],
-                image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&h=300&fit=crop",
+                rating: 4.5,
+                amenities: ["WiFi", "Meals", "AC"],
+                image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=800&auto=format&fit=crop",
               },
               {
-                name: "Tech Paradise PG",
+                name: "Your Space",
                 location: "0.8 km from campus",
-                price: "₹6,500",
+                price: "₹7,500",
                 students: 18,
-                rating: 4.6,
-                amenities: ["WiFi", "Meals", "Parking"],
-                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&h=300&fit=crop",
+                rating: 4.2,
+                amenities: ["WiFi", "Laundry"],
+                image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop",
               },
               {
-                name: "Scholar's Haven",
+                name: "Zolo Stays",
                 location: "1.2 km from campus",
-                price: "₹7,200",
+                price: "₹6,500",
                 students: 32,
-                rating: 4.7,
-                amenities: ["WiFi", "Meals", "Gym", "AC"],
-                image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&h=300&fit=crop",
+                rating: 4.0,
+                amenities: ["WiFi", "Meals"],
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=800&auto=format&fit=crop",
               },
             ].map((pg, index) => (
               <motion.div key={index} variants={fadeInUp}>
@@ -394,19 +364,20 @@ export default function Home() {
           </motion.div>
 
           <motion.div {...fadeInUp} className="text-center mt-12">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 hover:bg-accent/50 text-base px-12"
-            >
-              View All PG Options
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            <Link href="/collegePGFinder">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2 hover:bg-accent/50 text-base px-12"
+              >
+                View All PG Options
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

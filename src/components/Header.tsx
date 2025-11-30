@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -20,14 +20,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session, isPending, refetch } = useSession();
+  const { data: session, isPending, refetch, clearSession } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
+
+
 
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "#about", label: "About Us" },
-    { href: "#community", label: "Community" },
-    { href: "#pg-finder", label: "PG Finder" },
+    { href: "/collegePGFinder", label: "PG Finder" },
+    { href: "/campusQueryConnect", label: "Q&A Community" },
+    { href: "/resources", label: "Resources" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -40,12 +44,13 @@ export default function Header() {
         },
       },
     });
-    
+
     if (error?.code) {
       toast.error("Failed to sign out");
     } else {
       localStorage.removeItem("bearer_token");
-      refetch();
+      // refetch(); // Instead of refetching, we clear the session immediately
+      clearSession();
       toast.success("Signed out successfully");
       router.push("/");
     }
@@ -90,49 +95,66 @@ export default function Header() {
             {isPending ? (
               <div className="h-9 w-20 animate-pulse bg-accent rounded-md" />
             ) : session?.user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar>
-                      <AvatarFallback className="bg-gradient-to-br from-purple-600 to-pink-600 text-white font-semibold">
-                        {session.user.name?.charAt(0).toUpperCase() || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium">{session.user.name}</p>
-                      <p className="text-xs text-muted-foreground">{session.user.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/community" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      Q&A Community
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center gap-4">
+                <Button asChild className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all">
+                  <Link href={`/campusQueryConnect/profile/${session.user.id}`}>
+                    My Profile
+                  </Link>
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Avatar>
+                        <AvatarFallback className="bg-gradient-to-br from-purple-600 to-pink-600 text-white font-semibold">
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium">{session.user.name}</p>
+                        <p className="text-xs text-muted-foreground">{session.user.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href={`/campusQueryConnect/profile/${session.user.id}`} className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/campusQueryConnect" className="cursor-pointer">
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        Q&A Community
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
               <>
-                <Link href="/login">
-                  <Button variant="ghost">
-                    Login
+                {pathname !== "/login" && (
+                  <Button variant="ghost" asChild>
+                    <Link href="/login">
+                      Login
+                    </Link>
                   </Button>
-                </Link>
-                <Link href="/register">
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all">
-                    Sign Up
+                )}
+                {pathname !== "/register" && (
+                  <Button asChild className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all">
+                    <Link href="/register">
+                      Sign Up
+                    </Link>
                   </Button>
-                </Link>
+                )}
               </>
             )}
           </div>
@@ -174,13 +196,23 @@ export default function Header() {
                       <p className="font-medium text-foreground">{session.user.name}</p>
                       <p className="text-xs">{session.user.email}</p>
                     </div>
-                    <Link href="/community">
+                    <Link href={`/campusQueryConnect/profile/${session.user.id}`}>
                       <Button
                         variant="ghost"
                         className="w-full justify-start"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <User className="mr-2 h-4 w-4" />
+                        My Profile
+                      </Button>
+                    </Link>
+                    <Link href="/campusQueryConnect">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <MessageSquare className="mr-2 h-4 w-4" />
                         Q&A Community
                       </Button>
                     </Link>
@@ -198,23 +230,29 @@ export default function Header() {
                   </>
                 ) : (
                   <>
-                    <Link href="/login">
+                    {pathname !== "/login" && (
                       <Button
                         variant="ghost"
                         className="w-full"
                         onClick={() => setIsMenuOpen(false)}
+                        asChild
                       >
-                        Login
+                        <Link href="/login">
+                          Login
+                        </Link>
                       </Button>
-                    </Link>
-                    <Link href="/register">
+                    )}
+                    {pathname !== "/register" && (
                       <Button
                         className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
                         onClick={() => setIsMenuOpen(false)}
+                        asChild
                       >
-                        Sign Up
+                        <Link href="/register">
+                          Sign Up
+                        </Link>
                       </Button>
-                    </Link>
+                    )}
                   </>
                 )}
               </div>
@@ -222,6 +260,6 @@ export default function Header() {
           )}
         </AnimatePresence>
       </nav>
-    </header>
+    </header >
   );
 }

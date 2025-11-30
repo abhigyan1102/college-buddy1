@@ -9,15 +9,15 @@ export default function Footer() {
   const quickLinks = [
     { href: "/", label: "Home" },
     { href: "#about", label: "About Us" },
-    { href: "#community", label: "Community" },
-    { href: "#pg-finder", label: "PG Finder" },
+    { href: "/campusQueryConnect", label: "Q&A Community" },
+    { href: "/collegePGFinder", label: "PG Finder" },
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
+    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+    { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
   ];
 
   return (
@@ -45,14 +45,15 @@ export default function Footer() {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href}>
-                    <Button
-                      variant="link"
-                      className="h-auto p-0 text-muted-foreground hover:text-foreground transition-colors"
-                    >
+                  <Button
+                    variant="link"
+                    className="h-auto p-0 text-muted-foreground hover:text-foreground transition-colors"
+                    asChild
+                  >
+                    <Link href={link.href}>
                       {link.label}
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </li>
               ))}
             </ul>
@@ -62,13 +63,19 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start space-x-3 text-sm text-muted-foreground">
+              <li className="flex items-start space-x-3 text-sm text-muted-foreground hover:text-purple-500 transition-colors cursor-pointer">
                 <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-purple-500" />
-                <span>Supporting students across India</span>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Ajeenkya+DY+Patil+University"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ajeenkya DY Patil University
+                </a>
               </li>
-              <li className="flex items-center space-x-3 text-sm text-muted-foreground">
+              <li className="flex items-center space-x-3 text-sm text-muted-foreground hover:text-purple-500 transition-colors cursor-pointer">
                 <Mail className="w-5 h-5 flex-shrink-0 text-purple-500" />
-                <span>support@campusbuddy.com</span>
+                <a href="mailto:support@campusbuddy.com">support@campusbuddy.com</a>
               </li>
             </ul>
           </div>
@@ -81,6 +88,8 @@ export default function Footer() {
                 <motion.a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600/20 to-pink-600/20 hover:from-purple-600 hover:to-pink-600 flex items-center justify-center text-foreground hover:text-white transition-all shadow-md hover:shadow-lg"
@@ -90,11 +99,11 @@ export default function Footer() {
               ))}
             </div>
             <div className="pt-4">
-              <Link href="/community">
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+              <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                <Link href="/campusQueryConnect">
                   Join Community
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

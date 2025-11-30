@@ -24,7 +24,7 @@ export default function AnimatedBackground() {
     window.addEventListener("resize", resize);
 
     const animate = () => {
-      time += 0.005;
+      time += 0.002; // Slower animation for a more relaxed feel
 
       const gradient = ctx.createLinearGradient(
         0,
@@ -33,33 +33,32 @@ export default function AnimatedBackground() {
         canvas.height
       );
 
-      // Dynamic gradient colors
-      const hue1 = (time * 20) % 360;
-      const hue2 = (time * 20 + 60) % 360;
-      const hue3 = (time * 20 + 120) % 360;
-      const hue4 = (time * 20 + 180) % 360;
+      // Dark aesthetic gradient colors (Deep Violet, Midnight Blue, Black)
+      const hue1 = (time * 10) % 360;
+      const hue2 = (time * 10 + 60) % 360;
 
-      gradient.addColorStop(0, `hsla(${hue1}, 70%, 60%, 0.3)`);
-      gradient.addColorStop(0.33, `hsla(${hue2}, 70%, 60%, 0.3)`);
-      gradient.addColorStop(0.66, `hsla(${hue3}, 70%, 60%, 0.3)`);
-      gradient.addColorStop(1, `hsla(${hue4}, 70%, 60%, 0.3)`);
+      // Deep, dark background base
+      gradient.addColorStop(0, "#0f0c29"); // Night
+      gradient.addColorStop(0.5, "#302b63"); // Midnight
+      gradient.addColorStop(1, "#24243e"); // Dark Blue
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add floating orbs
-      for (let i = 0; i < 5; i++) {
+      // Add floating orbs with subtle glow
+      for (let i = 0; i < 6; i++) {
         const x =
           canvas.width / 2 +
-          Math.sin(time + i * 1.5) * (canvas.width / 3);
+          Math.sin(time * 0.5 + i * 1.5) * (canvas.width / 2.5);
         const y =
           canvas.height / 2 +
-          Math.cos(time * 0.8 + i * 1.2) * (canvas.height / 3);
-        const radius = 150 + Math.sin(time * 2 + i) * 50;
+          Math.cos(time * 0.3 + i * 1.2) * (canvas.height / 2.5);
+        const radius = 100 + Math.sin(time + i) * 50;
 
         const orbGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        orbGradient.addColorStop(0, `hsla(${(hue1 + i * 60) % 360}, 80%, 70%, 0.4)`);
-        orbGradient.addColorStop(1, `hsla(${(hue1 + i * 60) % 360}, 80%, 70%, 0)`);
+        // Subtle glowing orbs
+        orbGradient.addColorStop(0, `hsla(${(hue1 + i * 40) % 360}, 60%, 50%, 0.15)`);
+        orbGradient.addColorStop(1, `hsla(${(hue1 + i * 40) % 360}, 60%, 50%, 0)`);
 
         ctx.fillStyle = orbGradient;
         ctx.beginPath();
@@ -81,8 +80,8 @@ export default function AnimatedBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 opacity-60"
-      style={{ filter: "blur(60px)" }}
+      className="fixed inset-0 z-0"
+      style={{ filter: "blur(40px)" }}
     />
   );
 }
